@@ -5,17 +5,27 @@ import com.br.testenetdeal.domain.repository.ColaboradorRepository;
 import com.br.testenetdeal.util.Encriptador;
 import com.br.testenetdeal.util.PasswordHandler;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
+import static java.util.Objects.compare;
+import static java.util.Objects.isNull;
+
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class ColaboradorService {
 
     @Autowired
-    ColaboradorRepository colaboradorRepository;
+    private ColaboradorRepository colaboradorRepository;
 
     /**
      * lista colaboradores por filtro e ordenado
@@ -23,9 +33,18 @@ public class ColaboradorService {
      * @return List<Despesa>
      */
     public List<Colaborador> getAllColaboradores(Sort sort) {
-        List<Colaborador> personList = colaboradorRepository.findByColaboradorPaiIsNull(sort);
-        return personList;
+        List<Colaborador> colaboradorList = colaboradorRepository.findByColaboradorPaiIsNull(sort);
+        return colaboradorList;
     }
+
+//    /**
+//     * retorno uma lista de colaboradores com id e nome apenas
+//     * @return List<Colaborador>
+//     */
+//    public List<Colaborador> getNomesColaboradores(){
+//        List<Colaborador> colaboradorList = colaboradorRepository.findIdNomeColaborador();
+//        return colaboradorList;
+//    }
 
     /**
      * busca colaborador por id
@@ -38,29 +57,93 @@ public class ColaboradorService {
         return colaborador;
     }
 
+    /**
+     * salva o colaborador
+     * @param colaborador
+     * @return Colaborador
+     */
     public Colaborador saveColaborador(Colaborador colaborador) {
-        colaborador.setPontuacao(calculatePasswordScore(colaborador.getSenha()));
+        colaborador.setPontuacao(calculaPontuacaoSenha(colaborador.getSenha()));
         colaborador.setSenha(Encriptador.encode(colaborador.getSenha()));
-        Colaborador saved = colaboradorRepository.save(colaborador);
-        return saved;
+        return colaboradorRepository.save(colaborador);
     }
 
-    public Colaborador updatePerson(Long id, Colaborador novoColaborador) {
+    /**
+     * atualiza colaborador
+     * @param id
+     * @param novoColaborador
+     * @return Colaborador
+     */
+    public Colaborador updateColaborador(Long id, Colaborador novoColaborador) {
         Colaborador dbColaborador = getColaboradorById(id);
-        dbColaborador.setPontuacao(calculatePasswordScore(novoColaborador.getSenha()));
+        dbColaborador.setPontuacao(calculaPontuacaoSenha(novoColaborador.getSenha()));
+        dbColaborador.setNome(novoColaborador.getNome());
         dbColaborador.setSenha(Encriptador.encode(novoColaborador.getSenha()));
+
+        if(!isNull(novoColaborador.getColaboradorPai())){
+            Colaborador colaboradorPaiDb  = colaboradorRepository.findById(novoColaborador.getColaboradorPai().getId()).get();
+            colaboradorPaiDb.setColaboradorPai(dbColaborador.getColaboradorPai());
+            colaboradorRepository.save(colaboradorPaiDb);
+        }
+
         dbColaborador.setColaboradorPai(novoColaborador.getColaboradorPai());
-        Colaborador result = colaboradorRepository.save(novoColaborador);
-        return result;
+
+        if(!dbColaborador.getSubColaboradores().isEmpty()){
+            buscarRescursivaElementoFilho(dbColaborador,
+                    novoColaborador.getColaboradorPai().getId());
+        }
+
+        return colaboradorRepository.save(dbColaborador);
     }
 
-    public void deletePerson(Long id) {
+    public void buscarRescursivaElementoFilho(Colaborador col, Long id){
+        col.getSubColaboradores().forEach(colaborador -> {
+            if(!colaborador.getSubColaboradores().isEmpty()){
+
+                Predicate<Colaborador> isEqual = colab -> colab.getId().equals(id);
+                colaborador.getSubColaboradores().removeIf(isEqual);
+                colaboradorRepository.save(colaborador);
+
+//                Colaborador colaboradorPaiDb  = colaboradorRepository.findById(id).get();
+//                colaboradorPaiDb.setColaboradorPai(col.getColaboradorPai());
+//                colaboradorRepository.save(colaboradorPaiDb);
+
+//                Colaborador colaboradorPaiDb  = colaboradorRepository.findById(novoColaborador.getColaboradorPai().getId()).get();
+//                colaboradorPaiDb.setColaboradorPai(dbColaborador.getColaboradorPai());
+//                colaboradorRepository.save(colaboradorPaiDb);
+
+//                if(!colaborador.getSubColaboradores()
+//                        .stream()
+//                        .filter(c -> c.getId().equals(id))
+//                        .findAny()
+//                        .isEmpty()){
+//                    colaborador.getSubColaboradores().re
+//                    log.info("........... " + colaborador.getId());
+//                }
+
+                buscarRescursivaElementoFilho(colaborador, id);
+            }
+        });
+
+
+    }
+
+    /**
+     * excluir o colaborador
+     * @param id
+     */
+    public void deleteColaborador(Long id) {
         Colaborador dbColaborador = getColaboradorById(id);
         colaboradorRepository.delete(dbColaborador);
     }
 
-    private int calculatePasswordScore(String password) {
+    /**
+     * calcula a força(puntuação) da senha
+     * @param senha
+     * @return int
+     */
+    private int calculaPontuacaoSenha(String senha) {
         PasswordHandler passwordHandler = new PasswordHandler();
-        return passwordHandler.getScore(password);
+        return passwordHandler.getScore(senha);
     }
 }

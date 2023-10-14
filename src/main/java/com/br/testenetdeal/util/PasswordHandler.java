@@ -5,7 +5,8 @@ import java.util.function.Predicate;
 public class PasswordHandler {
 
     public int getScore(String password) {
-        return calculateAdditions(password) + calculateDeductions(password);
+        int pont = calculateAdditions(password) + calculateDeductions(password);
+        return Math.min(pont, 100);
     }
 
     public boolean isValidPassword(String password){

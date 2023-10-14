@@ -1,5 +1,8 @@
 package com.br.testenetdeal.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,11 +33,12 @@ public class Colaborador implements Serializable {
     @Column(name = "senha")
     private String senha;
 
-    @NotNull(message = "Pontuação é obrigatória")
+    @JsonBackReference
     @Column(name = "pontuacao")
     private Integer pontuacao;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pai_id")
     private Colaborador colaboradorPai;
 

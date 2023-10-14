@@ -3,7 +3,7 @@ package com.br.testenetdeal.api.restcontroller;
 import com.br.testenetdeal.api.dto.ColaboradorReq;
 import com.br.testenetdeal.api.dto.ColaboradorResp;
 import com.br.testenetdeal.api.mapper.ColaboradorReqMapper;
-import com.br.testenetdeal.api.mapper.ColaboradorResponseMapper;
+import com.br.testenetdeal.api.mapper.ColaboradorRespMapper;
 import com.br.testenetdeal.domain.model.Colaborador;
 import com.br.testenetdeal.service.ColaboradorService;
 import jakarta.validation.Valid;
@@ -26,9 +26,10 @@ import static java.util.Objects.isNull;
 public class ColaboradorRestController {
 
     @Autowired
-    ColaboradorService colaboradorService;
+    private final ColaboradorService colaboradorService;
 
-    private final ColaboradorResponseMapper colaboradorRespMapper;
+    private final ColaboradorRespMapper colaboradorRespMapper;
+
     private final ColaboradorReqMapper colaboradorReqMapper;
 
     /**
@@ -38,10 +39,20 @@ public class ColaboradorRestController {
      */
     @GetMapping()
     public ResponseEntity<List<ColaboradorResp>> getAllColaboradores(Sort sort) {
-        List<Colaborador> persons = colaboradorService.getAllColaboradores(sort);
-        List<ColaboradorResp> responseList = persons.stream().map(colaboradorRespMapper::colaboradorToResp).toList();
+        List<Colaborador> colaboradores = colaboradorService.getAllColaboradores(sort);
+        List<ColaboradorResp> responseList = colaboradores.stream().map(colaboradorRespMapper::colaboradorToResp).toList();
         return ResponseEntity.ok(responseList);
     }
+
+//    /**
+//     *
+//     */
+//    @GetMapping("/nomes")
+//    public ResponseEntity<List<ColaboradorResp>> getAllColaboradores() {
+//        List<Colaborador> colaboradores = colaboradorService.getNomesColaboradores();
+//        List<ColaboradorResp> responseList = colaboradores.stream().map(colaboradorRespMapper::colaboradorToResp).toList();
+//        return ResponseEntity.ok(responseList);
+//    }
 
     /**
      * busca o colaborador pelo id
@@ -62,7 +73,7 @@ public class ColaboradorRestController {
      * @return ColaboradorResp
      */
     @PostMapping()
-    public ResponseEntity<ColaboradorResp> createPerson(@RequestBody @Valid ColaboradorReq colaboradorReq) {
+    public ResponseEntity<ColaboradorResp> saveColaborador(@RequestBody @Valid ColaboradorReq colaboradorReq) {
         Colaborador colaborador = colaboradorReqMapper.colaboradorReqToColaborador(colaboradorReq);
         ColaboradorResp response = colaboradorRespMapper.colaboradorToResp(colaboradorService.saveColaborador(colaborador));
         return ResponseEntity.ok(response);
@@ -74,11 +85,10 @@ public class ColaboradorRestController {
      * @param colaboradorReq
      * @return ColaboradorResp
      */
-
     @PutMapping("/{id}")
-    public ResponseEntity<ColaboradorResp> updatePerson(@PathVariable @NotNull Long id, @RequestBody @Valid ColaboradorReq colaboradorReq) {
+    public ResponseEntity<ColaboradorResp> updateColaborador(@PathVariable @NotNull Long id, @RequestBody @Valid ColaboradorReq colaboradorReq) {
         Colaborador colaborador = colaboradorReqMapper.colaboradorReqToColaborador(colaboradorReq);
-        ColaboradorResp response = colaboradorRespMapper.colaboradorToResp(colaboradorService.updatePerson(id, colaborador));
+        ColaboradorResp response = colaboradorRespMapper.colaboradorToResp(colaboradorService.updateColaborador(id, colaborador));
         return ResponseEntity.ok(response);
     }
 
@@ -88,8 +98,8 @@ public class ColaboradorRestController {
      * @return
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePerson(@PathVariable @NotNull Long id) {
-        colaboradorService.deletePerson(id);
+    public ResponseEntity<Void> deleteColaborador(@PathVariable @NotNull Long id) {
+        colaboradorService.deleteColaborador(id);
         return ResponseEntity.ok().build();
     }
 }

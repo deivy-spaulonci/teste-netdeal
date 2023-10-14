@@ -4,9 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
-@Data
 @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ColaboradorReq {
+    private Long id;
     @NotBlank
     private String nome;
     @NotBlank

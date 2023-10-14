@@ -1,0 +1,22 @@
+<h1>Teste Netdeal</h1>
+
+<form class="form-colaborador" name="formcolaborador">
+    <label for="nome">Nome: </label>
+    <input type="text" id="nome" name="nome" ng-model="$ctrl.colaborador.nome" required maxlength="100"><br>
+    <label for="senha">Senha: </label>
+    <input type="password" id="senha" name="senha" required maxlength="100" minlength="8"
+           ng-model="$ctrl.colaborador.senha"
+           ng-change="$ctrl.CheckStrngth()">
+        <span id="password_strength"></span>
+    <br>
+
+    <h3>Superior selecionado: {{$ctrl.getColaboradorSelected().nome || "Nenhum superior selecionado"}}</h3>
+
+    <button type="button" style="margin-right: 200px;" ng-click="$ctrl.clean()">Limpar</button>
+    <button type="button" ng-click="$ctrl.save()"
+            ng-disabled="!formcolaborador.$valid">Salvar</button>
+</form>
+<br>
+<fieldset><legend>Listagem dos colaboradores</legend>
+    <detalhe ng-repeat="colaborador in $ctrl.colaboradores" colaborador="colaborador"></detalhe>
+</fieldset>

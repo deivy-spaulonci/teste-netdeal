@@ -1,0 +1,93 @@
+/*.detalhe {*/
+/*    padding: 0;*/
+/*}*/
+.item, .pontuacao{
+    background-color: #EEE;
+}
+.pontuacao, .qualidade{
+    text-align: center;
+}
+.item, .pontuacao, .qualidade{
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+/*.pontuacao, .qualidade, .botoes{*/
+/*    cursor: pointer;*/
+/*    border-radius: 4px;*/
+/*    padding: .2em;*/
+/*    line-height: 1.4em;*/
+/*    height: 1.4em;*/
+/*    display: inline-block;*/
+/*    text-align: center;*/
+/*    margin-right: 10px;*/
+/*}*/
+.pontuacao{
+    font-weight: bold;
+}
+.qualidade{
+    color: white;
+}
+
+.item a{
+    text-indent: 10px;
+    color: #525252;
+    text-decoration: none;
+    width: 100%;
+
+
+    /*margin: .5em;*/
+    /*padding: .2em;*/
+    /*line-height: 1.4em;*/
+    /*height: 1.4em;*/
+    /*border-radius: 4px;*/
+    /*display: inline-block;*/
+    /*width: 200px;*/
+}
+
+/*.detalhe a:hover {*/
+/*    color: #2c3a41;*/
+/*    background-color: #e6e6e6;*/
+/*}*/
+
+/*.detalhe a:active {*/
+/*    background-color: #525252;*/
+/*    color: #fafafa;*/
+/*}*/
+
+/*.checked {*/
+/*    display: table-row;*/
+/*}*/
+.iconesButton{
+    width: 1.4em;
+    height: 1.4em;
+    margin-left: 10px;
+    cursor: pointer;
+}
+/*.iconesButton:first-child{*/
+/*    margin-right: 15px;*/
+/*}*/
+/*.botoes{*/
+/*    display: inline-block;*/
+/*    width: 100px;*/
+/*    background-color: #264D73;*/
+/*}*/
+/*.linha{*/
+/*    display: inline-block;*/
+/*}*/
+
+
+.grid, .gridsel {
+    display: inline-grid;
+    grid-template-columns: 270px 60px 100px 35px 35px;
+    gap: 5px 5px;
+
+    /*row-gap: 10px;*/
+    /*grid-column-gap: 10px;*/
+    /*grid-row-gap: 10px;*/
+    padding: 5px;
+}
+.gridsel{
+    background: #264D73;
+}
