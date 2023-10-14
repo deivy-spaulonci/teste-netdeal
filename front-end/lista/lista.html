@@ -5,8 +5,7 @@
     <input type="text" id="nome" name="nome" ng-model="$ctrl.colaborador.nome" required maxlength="100"><br>
     <label for="senha">Senha: </label>
     <input type="password" id="senha" name="senha" required maxlength="100" minlength="8"
-           ng-model="$ctrl.colaborador.senha"
-           ng-change="$ctrl.CheckStrngth()">
+           ng-model="$ctrl.colaborador.senha">
         <span id="password_strength"></span>
     <br>
 
@@ -20,3 +19,5 @@
 <fieldset><legend>Listagem dos colaboradores</legend>
     <detalhe ng-repeat="colaborador in $ctrl.colaboradores" colaborador="colaborador"></detalhe>
 </fieldset>
+
+{{$ctrl.strong | json}}

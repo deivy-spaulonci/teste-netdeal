@@ -1,6 +1,5 @@
 package com.br.testenetdeal.api.dto;
 
-import com.br.testenetdeal.domain.model.Colaborador;
 import lombok.Builder;
 import lombok.Data;
 

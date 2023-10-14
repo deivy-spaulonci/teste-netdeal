@@ -5,7 +5,6 @@ import com.br.testenetdeal.domain.repository.ColaboradorRepository;
 import com.br.testenetdeal.util.Encriptador;
 import com.br.testenetdeal.util.PasswordHandler;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 
-import static java.util.Objects.compare;
 import static java.util.Objects.isNull;
 
 @Slf4j
@@ -36,15 +33,6 @@ public class ColaboradorService {
         List<Colaborador> colaboradorList = colaboradorRepository.findByColaboradorPaiIsNull(sort);
         return colaboradorList;
     }
-
-//    /**
-//     * retorno uma lista de colaboradores com id e nome apenas
-//     * @return List<Colaborador>
-//     */
-//    public List<Colaborador> getNomesColaboradores(){
-//        List<Colaborador> colaboradorList = colaboradorRepository.findIdNomeColaborador();
-//        return colaboradorList;
-//    }
 
     /**
      * busca colaborador por id
@@ -88,7 +76,7 @@ public class ColaboradorService {
 
         dbColaborador.setColaboradorPai(novoColaborador.getColaboradorPai());
 
-        if(!dbColaborador.getSubColaboradores().isEmpty()){
+        if(!isNull(dbColaborador.getSubColaboradores()) && !dbColaborador.getSubColaboradores().isEmpty()){
             buscarRescursivaElementoFilho(dbColaborador,
                     novoColaborador.getColaboradorPai().getId());
         }
@@ -96,36 +84,22 @@ public class ColaboradorService {
         return colaboradorRepository.save(dbColaborador);
     }
 
+    /**
+     * no caso de editar e colocar superior como inferior
+     * eu removo (busca recursiva) o superior se ele exisitir em na estrutura como filho
+     * "seto o pai" desse item que a acabei de retirar com o pai de quem estou editando
+     * @param col
+     * @param id
+     */
     public void buscarRescursivaElementoFilho(Colaborador col, Long id){
         col.getSubColaboradores().forEach(colaborador -> {
             if(!colaborador.getSubColaboradores().isEmpty()){
-
                 Predicate<Colaborador> isEqual = colab -> colab.getId().equals(id);
                 colaborador.getSubColaboradores().removeIf(isEqual);
                 colaboradorRepository.save(colaborador);
-
-//                Colaborador colaboradorPaiDb  = colaboradorRepository.findById(id).get();
-//                colaboradorPaiDb.setColaboradorPai(col.getColaboradorPai());
-//                colaboradorRepository.save(colaboradorPaiDb);
-
-//                Colaborador colaboradorPaiDb  = colaboradorRepository.findById(novoColaborador.getColaboradorPai().getId()).get();
-//                colaboradorPaiDb.setColaboradorPai(dbColaborador.getColaboradorPai());
-//                colaboradorRepository.save(colaboradorPaiDb);
-
-//                if(!colaborador.getSubColaboradores()
-//                        .stream()
-//                        .filter(c -> c.getId().equals(id))
-//                        .findAny()
-//                        .isEmpty()){
-//                    colaborador.getSubColaboradores().re
-//                    log.info("........... " + colaborador.getId());
-//                }
-
                 buscarRescursivaElementoFilho(colaborador, id);
             }
         });
-
-
     }
 
     /**

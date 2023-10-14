@@ -44,16 +44,6 @@ public class ColaboradorRestController {
         return ResponseEntity.ok(responseList);
     }
 
-//    /**
-//     *
-//     */
-//    @GetMapping("/nomes")
-//    public ResponseEntity<List<ColaboradorResp>> getAllColaboradores() {
-//        List<Colaborador> colaboradores = colaboradorService.getNomesColaboradores();
-//        List<ColaboradorResp> responseList = colaboradores.stream().map(colaboradorRespMapper::colaboradorToResp).toList();
-//        return ResponseEntity.ok(responseList);
-//    }
-
     /**
      * busca o colaborador pelo id
      * @param id

@@ -6,7 +6,11 @@ public class PasswordHandler {
 
     public int getScore(String password) {
         int pont = calculateAdditions(password) + calculateDeductions(password);
-        return Math.min(pont, 100);
+        if(pont >= 100)
+            return 100;
+        else if(pont <= 1)
+            return 1;
+        return pont;
     }
 
     public boolean isValidPassword(String password){

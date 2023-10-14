@@ -60,51 +60,6 @@
             }
             angular.element(document.getElementById("password_strength")).html("");
         }
-
-        ctrl.strong = 1;
-
-        ctrl.CheckStrngth = function() {
-            var pswd = ctrl.colaborador.senha;
-            //TextBox left blank.
-            if (pswd !== null && pswd.length <= 0) {
-                angular.element(document.getElementById("password_strength")).html("");
-                return;
-            }
-            //Regular Expressions.
-            var regex = new Array();
-            regex.push("[A-Z]"); //Uppercase Alphabet.
-            regex.push("[a-z]"); //Lowercase Alphabet.
-            regex.push("[0-9]"); //Digit.
-            regex.push("[$$!%*#?&]"); //Special Character.
-            var passed = 0;
-            //Validate for each Regular Expression.
-            for (var i = 0; i < regex.length; i++) {
-                if (new RegExp(regex[i]).test(pswd)) {
-                    passed++;
-                }
-            }
-            //Validate for length of Password.
-            if (passed > 2 && pswd.length > 5) {
-                passed++;
-            }
-            // //Display status.
-            var color = "";
-            var strength = "";
-            // $scope.status = false;
-            var coment = "(Senha deve conter alphanumericos, e caracteres especiais)";
-            switch (passed){
-                case 1: strength = "Fraca "+coment; color = "red"; break;
-                case 2: strength = "Média "+coment; color = "darkorange"; break;
-                case 3: strength = "Boa "+coment; color = "green"; break;
-                case 4: strength = "Forte "+coment; color = "darkgreen"; break;
-                case 5: strength = "Muito Forte "+coment; color = "darkgreen"; break;
-                default: strength = "";
-            }
-            ctrl.strong = passed;
-            angular.element(document.getElementById("password_strength")).html(strength);
-            angular.element(document.getElementById("password_strength")).css("color", color);
-            // // $scope.status = status;
-        }
     }
     angular.module("app").component("colaboradorList", {
         templateUrl: "lista/lista.html",
