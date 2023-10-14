@@ -9,7 +9,10 @@
         <span id="password_strength"></span>
     <br>
 
-    <h3>Superior selecionado: {{$ctrl.getColaboradorSelected().nome || "Nenhum superior selecionado"}}</h3>
+    <p>
+        <small id="supLeg">Superior selecionado: </small>
+        <span id="sup">{{$ctrl.getColaboradorSelected().nome || "Nenhum superior selecionado"}}</span>
+    </p>
 
     <button type="button" style="margin-right: 200px;" ng-click="$ctrl.clean()">Limpar</button>
     <button type="button" ng-click="$ctrl.save()"
@@ -19,5 +22,3 @@
 <fieldset><legend>Listagem dos colaboradores</legend>
     <detalhe ng-repeat="colaborador in $ctrl.colaboradores" colaborador="colaborador"></detalhe>
 </fieldset>
-
-{{$ctrl.strong | json}}

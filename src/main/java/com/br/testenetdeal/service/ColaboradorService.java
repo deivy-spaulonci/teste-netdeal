@@ -68,19 +68,24 @@ public class ColaboradorService {
         dbColaborador.setNome(novoColaborador.getNome());
         dbColaborador.setSenha(Encriptador.encode(novoColaborador.getSenha()));
 
-        if(!isNull(novoColaborador.getColaboradorPai())){
-            Colaborador colaboradorPaiDb  = colaboradorRepository.findById(novoColaborador.getColaboradorPai().getId()).get();
-            colaboradorPaiDb.setColaboradorPai(dbColaborador.getColaboradorPai());
-            colaboradorRepository.save(colaboradorPaiDb);
-        }
+        Colaborador paiOld = dbColaborador.getColaboradorPai();
+//        if(isNull(dbColaborador.getColaboradorPai())){
+//            Colaborador colaboradorPaiDb  = colaboradorRepository.findById(novoColaborador.getColaboradorPai().getId()).get();
+//            colaboradorPaiDb.setColaboradorPai(null);
+//            colaboradorRepository.save(colaboradorPaiDb);
+//        }
 
         dbColaborador.setColaboradorPai(novoColaborador.getColaboradorPai());
 
-        if(!isNull(dbColaborador.getSubColaboradores()) && !dbColaborador.getSubColaboradores().isEmpty()){
-            buscarRescursivaElementoFilho(dbColaborador,
-                    novoColaborador.getColaboradorPai().getId());
-        }
+        if(!isNull(dbColaborador.getSubColaboradores())
+            && !dbColaborador.getSubColaboradores().isEmpty()){
+            buscarRescursivaElementoFilho(dbColaborador, novoColaborador.getColaboradorPai().getId());
 
+            Colaborador superior  = colaboradorRepository.findById(novoColaborador.getColaboradorPai().getId()).get();
+            superior.setColaboradorPai(paiOld);
+            colaboradorRepository.save(superior);
+
+        }
         return colaboradorRepository.save(dbColaborador);
     }
 
@@ -93,7 +98,9 @@ public class ColaboradorService {
      */
     public void buscarRescursivaElementoFilho(Colaborador col, Long id){
         col.getSubColaboradores().forEach(colaborador -> {
+
             if(!colaborador.getSubColaboradores().isEmpty()){
+
                 Predicate<Colaborador> isEqual = colab -> colab.getId().equals(id);
                 colaborador.getSubColaboradores().removeIf(isEqual);
                 colaboradorRepository.save(colaborador);

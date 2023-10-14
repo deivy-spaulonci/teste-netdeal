@@ -17,7 +17,9 @@
         }
 
         this.delete = function (id){
-            var isConfirmed = confirm("Confirma a exclusão desse colaborador ?");
+            var msg = "Confirma a exclusão deste colaborador ?";
+            msg = msg + "\n ( se hover dependentes ele também serão excluídos! )";
+            var isConfirmed = confirm(msg);
             if(isConfirmed){
                 $http.delete(url+"/"+id).then(function (response) {
                     alert('colaborador excluído!')

@@ -1,45 +1,19 @@
-<!--<div  ng-click="$ctrl.onSelect($ctrl.colaborador)" ng-class="$ctrl.isSelected() ? 'checked' : ''" class="linha">-->
-<!--  <div class="detalhe">-->
-<!--    <span class="item">-->
-<!--      <a href="#" title="{{$ctrl.colaborador.nome}}">-->
-<!--        {{$ctrl.colaborador.id}} - {{$ctrl.colaborador.nome | limitTo: 25}}-->
-<!--        {{$ctrl.colaborador.nome.length > 25 ? "..." : ""}}-->
-<!--      </a>-->
-<!--      <span class="pontuacao">-->
-<!--        {{$ctrl.colaborador.pontuacao}} %-->
-<!--      </span>-->
-<!--      <span class="qualidade" ng-style="{'background-color': $ctrl.getBackgroundColor()}">-->
-<!--        {{$ctrl.getStrongValue()}}-->
-<!--      </span>-->
-<!--    </span>-->
-<!--  </div>-->
-<!--</div>-->
-<!--<span class="botoes">-->
-<!--  <img src="icons/editar.png" class="iconesButton" title="Editar" ng-click="$ctrl.edit($ctrl.colaborador)"/>-->
-<!--  <img src="icons/lixeira.png" class="iconesButton" title="Excluir"/>-->
-<!--</span>-->
-
-<!--<div style="margin-left: 20px;" ng-if="$ctrl.colaborador.subColaboradores.length > 0">-->
-<!--  <detalhe ng-repeat="subColaborador in $ctrl.colaborador.subColaboradores"-->
-<!--          colaborador="subColaborador"></detalhe>-->
-<!--</div>-->
-
-  <div ng-class="$ctrl.isSelected() ? 'gridsel' : 'grid'" >
+<div ng-class="$ctrl.isSelected() ? 'gridsel' : 'grid'" >
 
     <div class="item" ng-click="$ctrl.onSelect($ctrl.colaborador, false)">
       <a href="#" title="{{$ctrl.colaborador.nome}}">
         {{$ctrl.colaborador.id}} - {{$ctrl.colaborador.nome | limitTo: 25}}
         {{$ctrl.colaborador.nome.length > 25 ? "..." : ""}}
-      </a>
+      </a> <img src="icons/check.png" id="iconchecked" ng-if="$ctrl.isSelected()"/>
     </div>
 
     <div class="pontuacao">{{$ctrl.colaborador.pontuacao}} %</div>
 
-    <div class="qualidade"
-         ng-style="{'background-color': $ctrl.getBackgroundColor()}">{{$ctrl.getStrongValue()}}</div>
+    <div class="qualidade" ng-style="{'background-color': $ctrl.getBackgroundColor()}">
+        {{$ctrl.getStrongValue()}}
+    </div>
 
     <img src="icons/editar.png" class="iconesButton" title="Editar" ng-click="$ctrl.onSelect($ctrl.colaborador, true)"/>
-
     <img src="icons/lixeira.png" class="iconesButton" title="Excluir" ng-click="$ctrl.onDelete($ctrl.colaborador.id)"/>
   </div>
 
