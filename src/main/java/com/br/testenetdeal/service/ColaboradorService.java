@@ -69,12 +69,6 @@ public class ColaboradorService {
         dbColaborador.setSenha(Encriptador.encode(novoColaborador.getSenha()));
 
         Colaborador paiOld = dbColaborador.getColaboradorPai();
-//        if(isNull(dbColaborador.getColaboradorPai())){
-//            Colaborador colaboradorPaiDb  = colaboradorRepository.findById(novoColaborador.getColaboradorPai().getId()).get();
-//            colaboradorPaiDb.setColaboradorPai(null);
-//            colaboradorRepository.save(colaboradorPaiDb);
-//        }
-
         dbColaborador.setColaboradorPai(novoColaborador.getColaboradorPai());
 
         if(!isNull(dbColaborador.getSubColaboradores())

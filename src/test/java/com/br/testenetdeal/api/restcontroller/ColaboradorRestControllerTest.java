@@ -95,18 +95,6 @@ public class ColaboradorRestControllerTest {
     }
 
     @Test
-    void testSaveColaboradorReturnsPersonResponse() {
-        when(colaboradorRespMapper.colaboradorToResp(this.col1)).thenReturn(this.colResp1);
-        when(colaboradorService.saveColaborador(this.col1)).thenReturn(this.col1);
-        when(colaboradorRespMapper.colaboradorToResp(this.col1)).thenReturn(colResp1);
-
-//        ResponseEntity<ColaboradorResp> response = colaboradorRestController.saveColaborador(this.colReq1);
-//
-//        assertEquals(HttpStatus.OK, response.getStatusCode());
-//        assertEquals(_JOAO, response.getBody().getNome());
-    }
-
-    @Test
     void testGetAllColaboradoresReturnsEmptyList() {
         List<Colaborador> persons = new ArrayList<>();
         when(colaboradorService.getAllColaboradores(Sort.by("nome"))).thenReturn(persons);
@@ -123,36 +111,6 @@ public class ColaboradorRestControllerTest {
         ResponseEntity<ColaboradorResp> response = colaboradorRestController.getColaboradorById(id);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
-
-//
-
-//
-//    @Test
-//    void test_update_person_name_only() {
-//        PersonRequest personRequest = new PersonRequest();
-//        personRequest.setName("John Doe Updated");
-//        personRequest.setPassword("MuitoComplicado@345@12");
-//
-//        PersonResponse personResponse = new PersonResponse();
-//        personResponse.setId(1L);
-//        personResponse.setName("John Doe Updated");
-//        personResponse.setScore(100);
-//
-//        Person updatedPerson = new Person();
-//        updatedPerson.setId(1L);
-//        updatedPerson.setName("John Doe Updated");
-//        updatedPerson.setPassword("MuitoComplicado@345@12");
-//
-//        Mockito.when(personRequestMapper.personRequestToPerson(personRequest)).thenReturn(updatedPerson);
-//
-//        Mockito.when(personService.updatePerson(1L, updatedPerson)).thenReturn(updatedPerson);
-//
-//        Mockito.when(personResponseMapper.personToPersonResponse(updatedPerson)).thenReturn(personResponse);
-//
-//        ResponseEntity<PersonResponse> response = personController.updatePerson(1L, personRequest);
-//        assertEquals(HttpStatus.OK, response.getStatusCode());
-//        assertEquals(personResponse, response.getBody());
-//    }
 
     @Test
     void test_Ok_delete_Colaborador_with_valid_id() {

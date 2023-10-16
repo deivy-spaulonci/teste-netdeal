@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS colaborador (
     editado_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_colaborador_parent FOREIGN KEY (pai_id) REFERENCES colaborador(id) ON DELETE CASCADE
 );
-
-INSERT INTO colaborador (nome, senha, pontuacao) VALUES ( "FULANO 1", "1234", 0);
-INSERT INTO colaborador (nome, senha, pontuacao) VALUES ( "FULANO 2", "3333", 0);
-INSERT INTO colaborador (nome, senha, pontuacao) VALUES ( "FULANO 3", "2222", 0);
+--
+-- INSERT INTO colaborador (nome, senha, pontuacao) VALUES ( "FULANO 1", "1234", 0);
+-- INSERT INTO colaborador (nome, senha, pontuacao) VALUES ( "FULANO 2", "3333", 0);
+-- INSERT INTO colaborador (nome, senha, pontuacao) VALUES ( "FULANO 3", "2222", 0);

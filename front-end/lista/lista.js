@@ -34,9 +34,6 @@
         ctrl.save = async function() {
             if(ctrl.getColaboradorSelected())
                 ctrl.colaborador.colaboradorPai = ctrl.getColaboradorSelected().id;
-
-            // alert(JSON.stringify(ctrl.colaborador));
-
             if(ctrl.colaborador.id) {
                 await $http.put(url + "/" + ctrl.colaborador.id, ctrl.colaborador)
                     .then(function (response) {
